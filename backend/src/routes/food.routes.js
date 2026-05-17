@@ -16,7 +16,7 @@ const upload = multer({
 router.post(
   "/",
   authMiddleware.authFoodPartnerMiddleware,
-  upload.single("video"),
+  upload.single("food2"),
   foodController.createFood,
 ); // ab is ka matlab kiya ha ka pahli hamari request middleware ka pas jay gi, middleware request process kara ga(see by yourself how), then usa forword kara go to controller, matlab ya request ko authenticate karta ha ka eigther the request is from food partner or not if yes then it will add that foodPartner details in the req.body, and farword that request. if not it will directly give an error and return that error, request controller tak jay gi hi nahi
 // now taht api is protected

@@ -19,6 +19,12 @@ async function authFoodPartnerMiddleware(req, res, next) {
 
     const foodPartner = await foodPartnerModel.findById(decoded.id); // find foodPartner on the basses of id in DB
 
+    if (!foodPartner) {
+      return res.status(401).json({
+        message: "Unauthorized. Food partners only.",
+      });
+    }
+
     req.foodPartner = foodPartner; // in req body we don't have property foodPetner, here we are creating one, and assining that with foodPartner(i.e data fetched from DB)
 
     next(); // middleware ka bad jis controller par move karna ha the flow will move there, --> ! simply specified controller ma request ko forword kar ga --> processing karna kaliya
