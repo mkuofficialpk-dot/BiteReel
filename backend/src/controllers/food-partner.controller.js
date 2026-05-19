@@ -24,6 +24,26 @@ async function getFoodPartnerById(req, res) {
   });
 }
 
+async function getCurrentFoodPartner(req, res) {
+  const foodPartnerId = req.foodPartner._id;
+
+  const foodPartner = await foodPartnerModel.findById(foodPartnerId);
+  const foodItems = await foodModel.find({ foodPartner: foodPartnerId });
+
+  if (!foodPartner) {
+    return res.status(404).json({ message: "Food Partner not found" });
+  }
+
+  res.status(200).json({
+    message: "Current Food Partner retrieved successfully",
+    foodPartner: {
+      ...foodPartner.toObject(),
+      foodItems,
+    },
+  });
+}
+
 module.exports = {
   getFoodPartnerById,
+  getCurrentFoodPartner,
 };
