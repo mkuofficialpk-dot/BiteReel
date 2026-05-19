@@ -1,0 +1,321 @@
+/* ══════════════════════════════════════════════════════════════
+   dashboard.css  —  Food Partner Dashboard
+   Extends profile.css — all .profile-* classes are inherited.
+══════════════════════════════════════════════════════════════ */
+@import './profile.css';
+
+
+/* ════════════════════════════════════════════════════════════
+   Avatar wrapper + pencil edit button
+════════════════════════════════════════════════════════════ */
+.dashboard-avatar-wrap {
+    position: relative;
+    width: 84px;
+    height: 84px;
+    flex-shrink: 0;
+}
+
+/* .profile-avatar inside the wrap keeps its own size from profile.css */
+
+.dashboard-avatar-edit {
+    position: absolute;
+    bottom: 1px;
+    right: -3px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(242, 237, 232, 0.12);
+    background: #1e1b18;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 11px;
+    padding: 0;
+    line-height: 1;
+    transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.dashboard-avatar-edit:hover {
+    background: #2a2522;
+}
+
+.dashboard-avatar-edit:active {
+    transform: scale(0.88);
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Add Food Item button  (inside .profile-header card)
+════════════════════════════════════════════════════════════ */
+.dashboard-add-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: calc(100% - 32px);
+    margin: 0 16px 20px;
+    padding: 13px;
+    border-radius: 999px;
+    background: var(--p-accent);
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    font-family: inherit;
+    transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.dashboard-add-btn:hover {
+    filter: brightness(1.12);
+}
+
+.dashboard-add-btn:active {
+    transform: scale(0.97);
+}
+
+.dashboard-add-btn-icon {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1;
+    margin-top: -1px;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Bottom sheet — backdrop
+════════════════════════════════════════════════════════════ */
+.dashboard-sheet-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.62);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 200;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+
+    /* hidden state — always in DOM so animation works in both directions */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+.dashboard-sheet-backdrop.open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Bottom sheet — panel
+════════════════════════════════════════════════════════════ */
+.dashboard-sheet {
+    position: relative;
+    width: 100%;
+    max-width: 480px;
+    background: #1c1814;
+    border-radius: 24px 24px 0 0;
+    border-top: 1px solid rgba(242, 237, 232, 0.07);
+    padding: 10px 24px 40px;
+    box-sizing: border-box;
+
+    transform: translateY(100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dashboard-sheet-backdrop.open .dashboard-sheet {
+    transform: translateY(0);
+}
+
+/* drag handle bar */
+.dashboard-sheet-handle {
+    width: 40px;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(242, 237, 232, 0.16);
+    margin: 0 auto 18px;
+}
+
+/* × close button */
+.dashboard-sheet-close {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(242, 237, 232, 0.08);
+    color: rgba(242, 237, 232, 0.65);
+    font-size: 20px;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.dashboard-sheet-close:hover {
+    background: rgba(242, 237, 232, 0.14);
+    color: #f2ede8;
+}
+
+.dashboard-sheet-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #f2ede8;
+    margin: 0 0 22px;
+    letter-spacing: -0.02em;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Form fields
+════════════════════════════════════════════════════════════ */
+.dashboard-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-bottom: 16px;
+}
+
+.dashboard-form-label {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(242, 237, 232, 0.44);
+}
+
+/* Custom file pick area */
+.dashboard-file-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(242, 237, 232, 0.045);
+    border: 1.5px dashed rgba(242, 237, 232, 0.14);
+    border-radius: 12px;
+    padding: 14px 16px;
+    color: rgba(242, 237, 232, 0.5);
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.dashboard-file-input:hover {
+    border-color: rgba(201, 121, 64, 0.45);
+    background: rgba(201, 121, 64, 0.06);
+    color: rgba(242, 237, 232, 0.75);
+}
+
+/* filename chip shown after selection */
+.dashboard-file-chip {
+    color: var(--p-accent);
+    font-weight: 500;
+    font-size: 13px;
+}
+
+/* text + textarea inputs */
+.dashboard-form-input,
+.dashboard-form-textarea {
+    width: 100%;
+    box-sizing: border-box;
+    background: rgba(242, 237, 232, 0.05);
+    border: 1px solid rgba(242, 237, 232, 0.08);
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: #f2ede8;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-form-input::placeholder,
+.dashboard-form-textarea::placeholder {
+    color: rgba(242, 237, 232, 0.28);
+}
+
+.dashboard-form-input:focus,
+.dashboard-form-textarea:focus {
+    border-color: rgba(201, 121, 64, 0.5);
+    box-shadow: 0 0 0 3px rgba(201, 121, 64, 0.11);
+}
+
+.dashboard-form-textarea {
+    resize: none;
+}
+
+/* inline error */
+.dashboard-form-error {
+    margin: -8px 0 12px;
+    padding: 9px 13px;
+    font-size: 13px;
+    color: #e07070;
+    background: rgba(224, 112, 112, 0.1);
+    border: 1px solid rgba(224, 112, 112, 0.18);
+    border-radius: 10px;
+    line-height: 1.4;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Submit button
+════════════════════════════════════════════════════════════ */
+.dashboard-submit-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 13px;
+    margin-top: 6px;
+    border-radius: 999px;
+    background: var(--p-accent);
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    font-family: inherit;
+    transition: filter 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
+}
+
+.dashboard-submit-btn:hover:not(:disabled) {
+    filter: brightness(1.12);
+}
+
+.dashboard-submit-btn:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.dashboard-submit-btn:disabled {
+    opacity: 0.42;
+    cursor: not-allowed;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Responsive
+════════════════════════════════════════════════════════════ */
+@media (max-width: 380px) {
+    .dashboard-add-btn {
+        width: calc(100% - 20px);
+        margin-inline: 10px;
+        font-size: 13px;
+    }
+
+    .dashboard-sheet {
+        padding-inline: 18px;
+    }
+}
