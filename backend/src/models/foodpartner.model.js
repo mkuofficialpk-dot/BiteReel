@@ -7,6 +7,18 @@ const foodPartnerSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  contactName: {
+    type: String,
+    required: true
+  },
+  phone: {
+    type: String,
+    required: true
+  },
+  address: {
+    type: String,
+    required: true
+  },
   email: {
     type: String,
     required: true,
@@ -15,6 +27,14 @@ const foodPartnerSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+  },
+  totalMeals: {
+    type: Number,
+    default: 0,
+  },
+  customersServed: {
+    type: Number,
+    default: 0,
   },
 });
 
