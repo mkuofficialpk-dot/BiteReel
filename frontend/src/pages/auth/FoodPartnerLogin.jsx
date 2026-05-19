@@ -19,7 +19,7 @@ const FoodPartnerLogin = () => {
     });
 
     console.log(response.data);
-    navigate("/create-food");
+    navigate("/food-partner/dashboard");
   };
 
   return (
