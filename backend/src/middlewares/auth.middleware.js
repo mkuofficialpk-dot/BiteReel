@@ -1,8 +1,9 @@
 //auth.middleware.js
 const foodPartnerModel = require("../models/foodpartner.model");
+const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
-//middleware for
+//middleware for FoodPartner
 async function authFoodPartnerMiddleware(req, res, next) {
   const token = req.cookies.token; //fetching token from cookie from the FoodPartner request(because we know with every reuest the cookies also comes by default)
 
@@ -36,6 +37,38 @@ async function authFoodPartnerMiddleware(req, res, next) {
   }
 }
 
+// middleware for User
+async function authUserMiddleware(req, res, next) {
+  const token = req.cookies.token;
+
+  if (!token) {
+    return res.status(401).json({
+      message: "Please login first",
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await userModel.findById(decoded.id);
+
+    if (!user) {
+      return res.status(401).json({
+        message: "Unauthorized access.",
+      });
+    }
+
+    req.user = user;
+
+    next();
+  } catch (err) {
+    return res.status(401).json({
+      message: "Invalid token",
+    });
+  }
+}
+
 module.exports = {
-  authFoodPartnerMiddleware, //now require this in food.routs.js (to make that api protected)
+  authFoodPartnerMiddleware,
+  authUserMiddleware //now require this in food.routs.js (to make that api protected)
 };
