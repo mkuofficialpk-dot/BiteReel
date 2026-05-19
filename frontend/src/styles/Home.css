@@ -1,0 +1,40 @@
+/* ── Full-screen dark wrapper ── */
+.home-page {
+  position: fixed;
+  inset: 0;
+  background: #080808;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+}
+
+/* ── Scrollable reel column ── */
+.feed {
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.feed::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Empty / loading state ── */
+.feed-empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 14px;
+  letter-spacing: 0.04em;
+}

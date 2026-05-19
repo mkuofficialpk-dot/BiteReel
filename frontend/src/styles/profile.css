@@ -1,0 +1,305 @@
+/* ═══════════════════════════════════════════════════════════
+   profile.css  —  FoodPartner Profile
+   Warm-dark, minimal, premium — consistent with reels.css
+═══════════════════════════════════════════════════════════ */
+
+/* ── Design tokens (scoped to .profile-page) ── */
+.profile-page {
+  /* Surfaces */
+  --p-bg:           #0a0a0b;
+  --p-surface:      #131110;        /* warm charcoal card */
+  --p-border:       rgba(242, 237, 232, 0.07);
+
+  /* Accent — muted terracotta amber */
+  --p-accent:       #c97940;
+  --p-accent-dim:   rgba(201, 121, 64, 0.12);
+
+  /* Typography */
+  --p-text:         #f2ede8;        /* warm near-white */
+  --p-text-muted:   rgba(242, 237, 232, 0.44);
+
+  /* Pill surfaces */
+  --p-pill-bg:      rgba(242, 237, 232, 0.055);
+
+  /* Radii */
+  --p-r-card:       20px;
+  --p-r-pill:       999px;
+  --p-r-tile:       3px;
+
+  /* Motion */
+  --p-ease:         0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  /* Font */
+  --p-font: system-ui, -apple-system, BlinkMacSystemFont,
+            "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Page wrapper
+════════════════════════════════════════════════════════════ */
+.profile-page {
+  min-height: 100vh;
+  background: var(--p-bg);
+  font-family: var(--p-font);
+  color: var(--p-text);
+  -webkit-font-smoothing: antialiased;
+  max-width: 480px;
+  margin-inline: auto;
+  box-sizing: border-box;
+  padding-bottom: 52px;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Header card
+════════════════════════════════════════════════════════════ */
+.profile-header {
+  background: var(--p-surface);
+  border-radius: var(--p-r-card);
+  border: 1px solid var(--p-border);
+  /* clipped so the inner stats border-top touches the card edge cleanly */
+  overflow: hidden;
+  margin: 16px 14px 0;
+}
+
+
+/* ── Avatar + info row ── */
+.profile-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 20px 20px;
+}
+
+/* ── Avatar ── */
+.profile-avatar {
+  width: 84px;
+  height: 84px;
+  min-width: 84px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  border: 2px solid var(--p-accent);
+  box-shadow: 0 0 0 5px var(--p-accent-dim);
+  background: var(--p-surface);
+}
+
+/* ── Info column ── */
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;        /* allow text truncation in flex child */
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Pills  (.profile-pill is shared — applied to h1 and p)
+════════════════════════════════════════════════════════════ */
+.profile-pill {
+  /* reset heading/paragraph defaults */
+  margin: 0;
+  font-size: inherit;
+
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  border-radius: var(--p-r-pill);
+  padding: 6px 14px;
+  background: var(--p-pill-bg);
+  border: 1px solid var(--p-border);
+  line-height: 1.3;
+  box-sizing: border-box;
+
+  /* single-line truncation */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  transition: background var(--p-ease), border-color var(--p-ease);
+}
+
+/* ── Business name pill (h1) ── */
+.profile-business {
+  font-size: clamp(14px, 3.8vw, 16px);
+  font-weight: 700;
+  color: var(--p-text);
+  letter-spacing: -0.015em;
+}
+
+/* ── Address pill (p) ── */
+.profile-address {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--p-text-muted);
+  letter-spacing: 0.01em;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Stats row
+════════════════════════════════════════════════════════════ */
+.profile-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-top: 1px solid var(--p-border);
+}
+
+.profile-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 18px 12px 20px;
+  transition: background var(--p-ease);
+}
+
+/* vertical divider between the two stats */
+.profile-stat:first-child {
+  border-right: 1px solid var(--p-border);
+}
+
+.profile-stat:hover {
+  background: rgba(242, 237, 232, 0.025);
+}
+
+/* label sits above the big number */
+.profile-stat-label {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--p-text-muted);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.profile-stat-value {
+  font-size: clamp(28px, 7vw, 38px);
+  font-weight: 800;
+  color: var(--p-accent);
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Separator
+════════════════════════════════════════════════════════════ */
+.profile-sep {
+  border: none;
+  height: 1px;
+  background: var(--p-border);
+  margin: 14px 0 0;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Video grid  — edge-to-edge, Instagram-style tight gaps
+════════════════════════════════════════════════════════════ */
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+  margin-top: 3px;
+}
+
+/* empty-state pseudo-element */
+.profile-grid:empty::before {
+  content: "No videos yet";
+  grid-column: 1 / -1;
+  padding: 48px 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--p-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.profile-grid-item {
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  position: relative;
+  background: var(--p-surface);
+  border-radius: var(--p-r-tile);
+  cursor: pointer;
+  will-change: transform;
+}
+
+.profile-grid-item:focus,
+.profile-grid-item:focus-visible {
+  outline: 2px solid var(--p-accent);
+  outline-offset: -2px;
+  z-index: 1;
+}
+
+/* hover: scale back slightly (0.98) + brightening */
+.profile-grid-item:hover {
+  transform: scale(0.98);
+  transition: transform var(--p-ease);
+}
+
+/* gradient overlay on hover for premium feel */
+.profile-grid-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(201, 121, 64, 0.18) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity var(--p-ease);
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+.profile-grid-item:hover::after {
+  opacity: 1;
+}
+
+.profile-grid-video {
+  display: block;
+  /* width/height/object-fit are already set via inline style on the element;
+     these serve as fallback and prevent a flash before hydration */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+  transition: filter var(--p-ease);
+}
+
+.profile-grid-item:hover .profile-grid-video {
+  filter: brightness(1.1);
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Responsive — very small screens
+════════════════════════════════════════════════════════════ */
+@media (max-width: 380px) {
+  .profile-header {
+    margin-inline: 10px;
+  }
+
+  .profile-meta {
+    padding: 18px 16px 16px;
+    gap: 12px;
+  }
+
+  .profile-avatar {
+    width: 68px;
+    height: 68px;
+    min-width: 68px;
+  }
+
+  .profile-stat-value {
+    font-size: 26px;
+  }
+
+  .profile-grid {
+    gap: 2px;
+  }
+}
