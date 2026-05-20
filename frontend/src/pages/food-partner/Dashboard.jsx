@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import '../../styles/dashboard.css'
 import axios from 'axios'
 import defaultAvatar from '../../assets/default-avatar.svg'
+import HamburgerButton from '../../components/HamburgerButton'
+import SideDrawer from '../../components/SideDrawer'
 
 /* ─────────────────────────── Add Food bottom sheet ──────────────────────── */
 const UploadSheet = ({ open, onClose, onSuccess }) => {
@@ -304,6 +306,7 @@ const Dashboard = () => {
     const [videos, setVideos] = useState([])
     const [sheetOpen, setSheetOpen] = useState(false)
     const [isEditOpen, setIsEditOpen] = useState(false)
+    const [drawerOpen, setDrawerOpen] = useState(false)
 
     const fetchData = () => {
         axios.get('http://localhost:3000/api/food-partner/me', { withCredentials: true })
@@ -397,6 +400,13 @@ const Dashboard = () => {
                 onClose={() => setIsEditOpen(false)}
                 profile={profile}
                 onSuccess={fetchData}
+            />
+            <HamburgerButton onClick={() => setDrawerOpen(true)} />
+            <SideDrawer
+                open={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+                role="partner"
+                profile={profile}
             />
         </main>
     )

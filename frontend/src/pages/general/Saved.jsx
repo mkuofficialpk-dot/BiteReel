@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BottomNav from "../../components/BottomNav";
+import HamburgerButton from "../../components/HamburgerButton";
+import SideDrawer from "../../components/SideDrawer";
 import "../../styles/saved.css";
 
 const Saved = () => {
   const [savedFoods, setSavedFoods] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -70,7 +73,14 @@ const Saved = () => {
         </section>
       )}
 
+      <HamburgerButton onClick={() => setDrawerOpen(true)} />
       <BottomNav />
+      <SideDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        role="user"
+        profile={null}
+      />
     </main>
   );
 };
