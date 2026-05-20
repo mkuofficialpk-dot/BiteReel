@@ -34,6 +34,8 @@ app.use("/api/food", foodRputes);
 
 app.use("/api/food-partner", foodPartnerRoutes);
 
+app.use("/api/cart", require("./routes/cart.routes"));
+
 //as we know here we only create server, we start server in the server.js file ==> so we have to
 //export this file to server.js
 module.exports = app; // 3rd part
