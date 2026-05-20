@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/saved.css";
@@ -6,14 +7,17 @@ import "../../styles/saved.css";
 const Saved = () => {
   const [savedFoods, setSavedFoods] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
       .get("http://localhost:3000/api/food/saved", { withCredentials: true })
       .then((res) => setSavedFoods(res.data.savedFoods))
-      .catch(() => {})
+      .catch((err) => {
+        if (err.response?.status === 401) navigate("/user/login");
+      })
       .finally(() => setLoading(false));
-  }, []);
+  }, [navigate]);
 
   return (
     <main className="saved-page">
@@ -27,7 +31,11 @@ const Saved = () => {
         )}
       </header>
 
-      {!loading && savedFoods.length === 0 ? (
+      {loading ? (
+        <div className="saved-empty">
+          <p className="saved-empty-title">Loading...</p>
+        </div>
+      ) : savedFoods.length === 0 ? (
         <div className="saved-empty">
           <svg
             width="48"

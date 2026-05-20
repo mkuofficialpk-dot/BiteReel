@@ -1,11 +1,12 @@
 //profile.jsx
 import React, { useState, useEffect, use } from 'react'
 import '../../styles/profile.css'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import defaultAvatar from '../../assets/default-avatar.svg'
 const Profile = () => {
     const { id } = useParams()
+    const navigate = useNavigate()
     const [ profile, setProfile ] = useState(null)
     const [ videos, setVideos ] = useState([])
     useEffect(() => {
@@ -14,7 +15,10 @@ const Profile = () => {
                 setProfile(response.data.foodPartner)
                 setVideos(response.data.foodPartner.foodItems)
             })
-    }, [ id ])
+            .catch(err => {
+                if (err.response?.status === 401) navigate('/user/login')
+            })
+    }, [ id, navigate ])
     return (
         <main className="profile-page">
             <section className="profile-header">
@@ -43,7 +47,7 @@ const Profile = () => {
             <hr className="profile-sep" />
             <section className="profile-grid" aria-label="Videos">
                 {videos.map((v) => (
-                    <div key={v.id} className="profile-grid-item">
+                    <div key={v._id} className="profile-grid-item">
                         <video
                             className="profile-grid-video"
                             style={{ objectFit: 'cover', width: '100%', height: '100%' }}

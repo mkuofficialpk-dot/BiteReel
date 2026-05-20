@@ -1,5 +1,6 @@
 //Dashboard.jsx
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import '../../styles/dashboard.css'
 import axios from 'axios'
 import defaultAvatar from '../../assets/default-avatar.svg'
@@ -298,6 +299,7 @@ const EditSheet = ({ open, onClose, profile, onSuccess }) => {
 
 /* ─────────────────────────── Dashboard page ──────────────────────────────── */
 const Dashboard = () => {
+    const navigate = useNavigate()
     const [profile, setProfile] = useState(null)
     const [videos, setVideos] = useState([])
     const [sheetOpen, setSheetOpen] = useState(false)
@@ -309,10 +311,14 @@ const Dashboard = () => {
                 setProfile(response.data.foodPartner)
                 setVideos(response.data.foodPartner.foodItems)
             })
+            .catch(err => {
+                if (err.response?.status === 401) navigate('/food-partner/login')
+            })
     }
 
     useEffect(() => {
         fetchData()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -369,7 +375,7 @@ const Dashboard = () => {
 
             <section className="profile-grid" aria-label="Videos">
                 {videos.map((v) => (
-                    <div key={v.id} className="profile-grid-item">
+                    <div key={v._id} className="profile-grid-item">
                         <video
                             className="profile-grid-video"
                             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
