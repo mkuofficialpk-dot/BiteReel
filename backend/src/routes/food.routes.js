@@ -24,4 +24,15 @@ router.post(
 // GET/api/food/ [protected] --> ya foodPartner kaliya nahi ha --> ya user kaliya ha jub user scroll karain gain to jo new videos ain gi un sab ka dat alana kaliya ya wali api ha (simply jitna bhi food items hain un sab ki videos la ka ay gi) --> that means we have to create new middleware
 router.get("/", authMiddleware.authUserMiddleware, foodController.getFoodItems);
 
+
+router.post(
+  "/like",
+  authMiddleware.authUserMiddleware,
+  foodController.likeFood,
+);
+
+router.post("/save", authMiddleware.authUserMiddleware, foodController.saveFood);
+
+router.get("/saved", authMiddleware.authUserMiddleware, foodController.getSavedFoods);
+
 module.exports = router;
