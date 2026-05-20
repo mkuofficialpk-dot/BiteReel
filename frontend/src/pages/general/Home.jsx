@@ -6,6 +6,7 @@ import BottomNav from '../../components/BottomNav'
 
 const Home = () => {
     const [videos, setVideos] = useState([])
+    const [isCommentSheetOpen, setIsCommentSheetOpen] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -18,8 +19,8 @@ const Home = () => {
 
     return (
         <>
-            <ReelFeed foods={videos} />
-            <BottomNav />
+            <ReelFeed foods={videos} onCommentSheetToggle={setIsCommentSheetOpen} />
+            <BottomNav hidden={isCommentSheetOpen} />
         </>
     )
 }

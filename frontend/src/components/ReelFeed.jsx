@@ -4,6 +4,7 @@ import axios from "axios";
 import "../styles/reels.css";
 import HamburgerButton from "./HamburgerButton";
 import SideDrawer from "./SideDrawer";
+import CommentSheet from "./CommentSheet";
 
 const MuteIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
@@ -90,7 +91,7 @@ const CommentIcon = () => (
   </svg>
 );
 
-const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
+const ReelItem = forwardRef(function ReelItem({ reel, onVisible, onComment, commentCount }, ref) {
   const [muted, setMuted] = useState(true);
   const [visible, setVisible] = useState(false);
   const [liked, setLiked] = useState(reel.isLiked || false);
@@ -181,8 +182,9 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
     }
   };
 
-  const handleComment = () => {
-    alert("Comments coming soon");
+  const handleComment = (e) => {
+    e.stopPropagation();
+    onComment?.(reel._id);
   };
 
   const handleAddToCart = async () => {
@@ -326,6 +328,9 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
           >
             <CommentIcon />
           </button>
+          {commentCount > 0 && (
+            <span className="reel-action-count">{commentCount}</span>
+          )}
         </div>
       </div>
 
@@ -383,11 +388,28 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
   );
 });
 
-const ReelFeed = ({ foods = [], initialFoodId, headerSlot }) => {
+const ReelFeed = ({ foods = [], initialFoodId, headerSlot, onCommentSheetToggle }) => {
   const [, setCurrentIndex] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [commentSheetFor, setCommentSheetFor] = useState(null);
+  const [commentCounts, setCommentCounts] = useState({});
   const reelRefs = useRef([]);
   const scrolledRef = useRef(false);
+
+  useEffect(() => {
+    onCommentSheetToggle?.(Boolean(commentSheetFor));
+  }, [commentSheetFor, onCommentSheetToggle]);
+
+  useEffect(() => {
+    if (foods.length === 0) return;
+    setCommentCounts((prev) => {
+      const next = { ...prev };
+      foods.forEach((f) => {
+        if (!(f._id in next)) next[f._id] = f.commentCount || 0;
+      });
+      return next;
+    });
+  }, [foods]);
 
   // Scroll to the tapped video once on first load
   useEffect(() => {
@@ -453,10 +475,25 @@ const ReelFeed = ({ foods = [], initialFoodId, headerSlot }) => {
                 reelRefs.current[index] = el;
               }}
               onVisible={() => setCurrentIndex(index)}
+              onComment={(foodId) => setCommentSheetFor(foodId)}
+              commentCount={commentCounts[reel._id] ?? reel.commentCount ?? 0}
             />
           ))
         )}
       </div>
+
+      <CommentSheet
+        open={commentSheetFor !== null}
+        foodId={commentSheetFor}
+        onClose={() => setCommentSheetFor(null)}
+        onCountChange={(delta) => {
+          if (!commentSheetFor) return;
+          setCommentCounts((prev) => ({
+            ...prev,
+            [commentSheetFor]: (prev[commentSheetFor] || 0) + delta,
+          }));
+        }}
+      />
     </div>
   );
 };

@@ -64,11 +64,11 @@ const CartIcon = ({ active }) =>
     </svg>
   );
 
-const BottomNav = () => {
+const BottomNav = ({ hidden = false }) => {
   const { pathname } = useLocation();
 
   return (
-    <nav className="bottom-nav" aria-label="Main navigation">
+    <nav className={`bottom-nav${hidden ? " hidden" : ""}`} aria-label="Main navigation">
       <Link
         to="/"
         className={`bottom-nav-tab${pathname === "/" ? " active" : ""}`}
