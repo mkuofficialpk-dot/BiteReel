@@ -12,6 +12,7 @@ const UploadSheet = ({ open, onClose, onSuccess }) => {
     const [file, setFile] = useState(null)
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
+    const [price, setPrice] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
 
@@ -19,6 +20,7 @@ const UploadSheet = ({ open, onClose, onSuccess }) => {
         setFile(null)
         setName('')
         setDescription('')
+        setPrice('')
         setError('')
         setLoading(false)
     }
@@ -42,6 +44,7 @@ const UploadSheet = ({ open, onClose, onSuccess }) => {
         formData.append('foodItem', file)
         formData.append('name', name)
         formData.append('description', description)
+        formData.append('price', price)
 
         try {
             await axios.post('http://localhost:3000/api/food/', formData, {
@@ -113,12 +116,26 @@ const UploadSheet = ({ open, onClose, onSuccess }) => {
                         />
                     </div>
 
+                    <div className="dashboard-form-field">
+                        <label className="dashboard-form-label">Price (PKR)</label>
+                        <input
+                            className="dashboard-form-input"
+                            type="number"
+                            min="0"
+                            step="1"
+                            value={price}
+                            onChange={e => setPrice(e.target.value)}
+                            placeholder="e.g. 450"
+                            required
+                        />
+                    </div>
+
                     {error && <p className="dashboard-form-error">{error}</p>}
 
                     <button
                         className="dashboard-submit-btn"
                         type="submit"
-                        disabled={loading || !file || !name}
+                        disabled={loading || !file || !name || !price}
                     >
                         {loading ? 'Uploading...' : 'Upload Food'}
                     </button>
