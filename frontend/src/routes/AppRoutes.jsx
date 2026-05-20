@@ -4,6 +4,7 @@ import UserLogin from "../pages/auth/UserLogin";
 import FoodPartnerRegister from "../pages/auth/FoodPartnerRegister";
 import FoodPartnerLogin from "../pages/auth/FoodPartnerLogin";
 import Home from "../pages/general/Home";
+import Saved from "../pages/general/Saved";
 import CreateFood from "../pages/food-partner/CreateFood";
 import Profile from "../pages/food-partner/profile";
 import Dashboard from "../pages/food-partner/Dashboard";
@@ -21,6 +22,7 @@ const AppRoutes = () => {
         <Route path="/food-partner/dashboard" element={<Dashboard />} />
         <Route path="/food-partner/:id" element={<Profile />} />
         <Route path="/" element={<Home />} />
+        <Route path="/saved" element={<Saved />} />
         <Route path="/create-food" element={<CreateFood />} />
       </Routes>
     </Router>
