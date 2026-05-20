@@ -114,7 +114,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 20px 20px 38px;
+  padding: 20px 72px 90px 20px;
   z-index: 10;
   opacity: 0;
   transform: translateY(12px);
@@ -180,4 +180,51 @@
 
 .visit-btn:active {
   transform: scale(0.94);
+}
+
+/* ── Action column (like / save / comment) ── */
+.reel-actions {
+  position: absolute;
+  right: 14px;
+  bottom: 130px;
+  z-index: 15;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+
+.reel-action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.reel-action-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.75));
+  transition: transform 0.15s ease;
+}
+
+.reel-action-btn:active {
+  transform: scale(0.88);
+}
+
+.reel-action-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  line-height: 1;
+  letter-spacing: 0.02em;
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "../styles/reels.css";
 
 const MuteIcon = () => (
@@ -14,9 +15,86 @@ const UnmuteIcon = () => (
   </svg>
 );
 
+const HeartIcon = ({ filled }) =>
+  filled ? (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="#c97940"
+      stroke="#c97940"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    </svg>
+  ) : (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+    </svg>
+  );
+
+const BookmarkIcon = ({ filled }) =>
+  filled ? (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="#c97940"
+      stroke="#c97940"
+      strokeWidth="1"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+    </svg>
+  ) : (
+    <svg
+      width="28"
+      height="28"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="white"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+    </svg>
+  );
+
+const CommentIcon = () => (
+  <svg
+    width="28"
+    height="28"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="white"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
 const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
   const [muted, setMuted] = useState(true);
   const [visible, setVisible] = useState(false);
+  const [liked, setLiked] = useState(reel.isLiked || false);
+  const [likeCount, setLikeCount] = useState(reel.likeCount || 0);
+  const [saved, setSaved] = useState(reel.isSaved || false);
+  const [saveCount, setSaveCount] = useState(reel.saveCount || 0);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const navigate = useNavigate();
@@ -63,6 +141,42 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
     if (partnerId) navigate(`/food-partner/${partnerId}`);
   };
 
+  const handleLike = async () => {
+    const wasLiked = liked;
+    setLiked(!wasLiked);
+    setLikeCount((c) => (wasLiked ? c - 1 : c + 1));
+    try {
+      await axios.post(
+        "http://localhost:3000/api/food/like",
+        { foodId: reel._id },
+        { withCredentials: true }
+      );
+    } catch {
+      setLiked(wasLiked);
+      setLikeCount((c) => (wasLiked ? c + 1 : c - 1));
+    }
+  };
+
+  const handleSave = async () => {
+    const wasSaved = saved;
+    setSaved(!wasSaved);
+    setSaveCount((c) => (wasSaved ? c - 1 : c + 1));
+    try {
+      await axios.post(
+        "http://localhost:3000/api/food/save",
+        { foodId: reel._id },
+        { withCredentials: true }
+      );
+    } catch {
+      setSaved(wasSaved);
+      setSaveCount((c) => (wasSaved ? c + 1 : c - 1));
+    }
+  };
+
+  const handleComment = () => {
+    alert("Comments coming soon");
+  };
+
   return (
     <article
       className={`reel-item${visible ? " reel-visible" : ""}`}
@@ -90,6 +204,47 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
       </button>
 
       <div className="reel-gradient" aria-hidden="true" />
+
+      <div className="reel-actions">
+        <div className="reel-action-item">
+          <button
+            className="reel-action-btn"
+            type="button"
+            onClick={handleLike}
+            aria-label={liked ? "Unlike" : "Like"}
+          >
+            <HeartIcon filled={liked} />
+          </button>
+          {likeCount > 0 && (
+            <span className="reel-action-count">{likeCount}</span>
+          )}
+        </div>
+
+        <div className="reel-action-item">
+          <button
+            className="reel-action-btn"
+            type="button"
+            onClick={handleSave}
+            aria-label={saved ? "Unsave" : "Save"}
+          >
+            <BookmarkIcon filled={saved} />
+          </button>
+          {saveCount > 0 && (
+            <span className="reel-action-count">{saveCount}</span>
+          )}
+        </div>
+
+        <div className="reel-action-item">
+          <button
+            className="reel-action-btn"
+            type="button"
+            onClick={handleComment}
+            aria-label="Comment"
+          >
+            <CommentIcon />
+          </button>
+        </div>
+      </div>
 
       <div className="reel-overlay">
         {partnerName && <span className="reel-partner">{partnerName}</span>}
