@@ -98,7 +98,12 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
   const [saved, setSaved] = useState(reel.isSaved || false);
   const [saveCount, setSaveCount] = useState(reel.saveCount || 0);
   const [inCart, setInCart] = useState(reel.isInCart || false);
+  const [progress, setProgress] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [isPaused, setIsPaused] = useState(false);
   const videoRef = useRef(null);
+  const trackRef = useRef(null);
+  const wasPlayingBeforeDrag = useRef(false);
   const containerRef = useRef(null);
   const navigate = useNavigate();
 
@@ -197,6 +202,60 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
     }
   };
 
+  const handleVideoClick = () => {
+    if (isDragging) return;
+    const v = videoRef.current;
+    if (!v) return;
+    if (v.paused) v.play().catch(() => {});
+    else v.pause();
+  };
+
+  const onTimeUpdate = () => {
+    if (isDragging) return;
+    const v = videoRef.current;
+    if (!v || !v.duration || !isFinite(v.duration)) return;
+    setProgress((v.currentTime / v.duration) * 100);
+  };
+
+  const seekToClientX = (clientX) => {
+    const track = trackRef.current;
+    const v = videoRef.current;
+    if (!track || !v || !v.duration || !isFinite(v.duration)) return;
+    const rect = track.getBoundingClientRect();
+    const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    v.currentTime = pct * v.duration;
+    setProgress(pct * 100);
+  };
+
+  const onPointerDown = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+    const v = videoRef.current;
+    wasPlayingBeforeDrag.current = v ? !v.paused : false;
+    if (v) v.pause();
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch {}
+    seekToClientX(e.clientX);
+  };
+
+  const onPointerMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    e.stopPropagation();
+    seekToClientX(e.clientX);
+  };
+
+  const onPointerUp = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+    try { e.currentTarget.releasePointerCapture(e.pointerId); } catch {}
+    if (wasPlayingBeforeDrag.current && videoRef.current) {
+      videoRef.current.play().catch(() => {});
+    }
+  };
+
   return (
     <article
       className={`reel-item${visible ? " reel-visible" : ""}`}
@@ -212,6 +271,10 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
         playsInline
         preload="metadata"
         aria-label={reel.description}
+        onClick={handleVideoClick}
+        onTimeUpdate={onTimeUpdate}
+        onPause={() => setIsPaused(true)}
+        onPlay={() => setIsPaused(false)}
       />
 
       <button
@@ -292,6 +355,30 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
           </button>
         </div>
       </div>
+
+      <div
+        ref={trackRef}
+        className={`reel-progress-track${isDragging ? " dragging" : ""}`}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+      >
+        <div className="reel-progress-bg" />
+        <div
+          className="reel-progress-fill"
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+
+      <div
+        className={`reel-pause-indicator${isPaused ? " visible" : ""}`}
+        aria-hidden="true"
+      >
+        <svg width="72" height="72" viewBox="0 0 24 24" fill="white">
+          <path d="M8 5v14l11-7z" />
+        </svg>
+      </div>
     </article>
   );
 });
@@ -340,7 +427,7 @@ const ReelFeed = ({ foods = [], initialFoodId, headerSlot }) => {
   }, [foods.length, scrollToIndex]);
 
   return (
-    <div className="home-page">
+    <div className={`home-page${!headerSlot ? " has-bottom-nav" : ""}`}>
       {headerSlot ? (
         headerSlot
       ) : (

@@ -59,6 +59,7 @@
   object-fit: cover;
   transform: scale(1.04);
   transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
 }
 
 .reel-item.reel-visible .reel-video {
@@ -322,4 +323,91 @@
 .reel-btn-incart:hover {
   filter: none;
   background: rgba(212, 165, 116, 0.25);
+}
+
+/* ── Progress bar ── */
+.reel-progress-track {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 18px;
+  display: flex;
+  align-items: flex-end;
+  cursor: pointer;
+  z-index: 20;
+  touch-action: none;
+  background: transparent;
+}
+
+.reel-progress-bg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+  transition: height 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 2px;
+}
+
+.reel-progress-fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  background: #ffffff;
+  pointer-events: none;
+  transition: height 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: width;
+  border-radius: 2px;
+}
+
+.reel-progress-track.dragging .reel-progress-bg,
+.reel-progress-track.dragging .reel-progress-fill {
+  height: 4px;
+}
+
+/* ── Pause indicator ── */
+.reel-pause-indicator {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.85);
+  width: 84px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.42);
+  border-radius: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.reel-pause-indicator.visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.reel-pause-indicator svg {
+  width: 36px;
+  height: 36px;
+  margin-left: 4px;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+}
+
+/* ── BottomNav offset: shift bar + pause indicator up 64px on pages with nav ── */
+.has-bottom-nav .reel-progress-track {
+  bottom: 64px;
+}
+
+.has-bottom-nav .reel-pause-indicator {
+  top: calc(50% - 32px);
 }
