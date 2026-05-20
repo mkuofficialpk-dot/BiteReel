@@ -3,22 +3,19 @@ const foodPartnerModel = require("../models/foodpartner.model");
 const userModel = require("../models/user.model");
 const jwt = require("jsonwebtoken");
 
-//middleware for FoodPartner
 async function authFoodPartnerMiddleware(req, res, next) {
-  const token = req.cookies.token; //fetching token from cookie from the FoodPartner request(because we know with every reuest the cookies also comes by default)
+  const token = req.cookies.partnerToken;
 
-  // if he don't has any token means un-uthorize access(because every user who is registered/login has the token we see that in auth api's)
   if (!token) {
     return res.status(401).json({
-      message: "Please login first",
+      message: "Not authenticated as food partner",
     });
   }
 
-  // now if token ha then we need to check if this token is valid token or someone made it,
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET); // if correct will return the food partner id in form of object, because we have set id during creating token in controller see there, if not will give error and that error will be handleld in catch.
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    const foodPartner = await foodPartnerModel.findById(decoded.id); // find foodPartner on the basses of id in DB
+    const foodPartner = await foodPartnerModel.findById(decoded.id);
 
     if (!foodPartner) {
       return res.status(401).json({
@@ -26,24 +23,22 @@ async function authFoodPartnerMiddleware(req, res, next) {
       });
     }
 
-    req.foodPartner = foodPartner; // in req body we don't have property foodPetner, here we are creating one, and assining that with foodPartner(i.e data fetched from DB)
+    req.foodPartner = foodPartner;
 
-    next(); // middleware ka bad jis controller par move karna ha the flow will move there, --> ! simply specified controller ma request ko forword kar ga --> processing karna kaliya
+    next();
   } catch (err) {
     return res.status(401).json({
-      // 401 is for un-authorize access
       message: "Invalid token",
     });
   }
 }
 
-// middleware for User
 async function authUserMiddleware(req, res, next) {
-  const token = req.cookies.token;
+  const token = req.cookies.userToken;
 
   if (!token) {
     return res.status(401).json({
-      message: "Please login first",
+      message: "Not authenticated as user",
     });
   }
 
@@ -70,5 +65,5 @@ async function authUserMiddleware(req, res, next) {
 
 module.exports = {
   authFoodPartnerMiddleware,
-  authUserMiddleware //now require this in food.routs.js (to make that api protected)
+  authUserMiddleware,
 };
