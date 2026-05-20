@@ -1,0 +1,73 @@
+/* cart.css */
+.cart-page {
+  min-height: 100vh;
+  background: #0a0a0b;
+  color: #f2ede8;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  max-width: 480px;
+  margin-inline: auto;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 80px;
+}
+
+.cart-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 48px 28px;
+  text-align: center;
+}
+
+.cart-empty-icon {
+  color: rgba(242, 237, 232, 0.14);
+  margin-bottom: 8px;
+}
+
+.cart-empty-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #f2ede8;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.cart-empty-subtitle {
+  font-size: 14px;
+  color: rgba(242, 237, 232, 0.4);
+  line-height: 1.55;
+  max-width: 260px;
+  margin: 0;
+}
+
+.cart-browse-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #c97940;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 13px 32px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 10px;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.cart-browse-btn:hover {
+  filter: brightness(1.12);
+}
+
+.cart-browse-btn:active {
+  transform: scale(0.96);
+}
