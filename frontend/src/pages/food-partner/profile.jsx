@@ -1,5 +1,5 @@
 //profile.jsx
-import React, { useState, useEffect, use } from 'react'
+import React, { useState, useEffect } from 'react'
 import '../../styles/profile.css'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
@@ -47,7 +47,16 @@ const Profile = () => {
             <hr className="profile-sep" />
             <section className="profile-grid" aria-label="Videos">
                 {videos.map((v) => (
-                    <div key={v._id} className="profile-grid-item">
+                    <div
+                        key={v._id}
+                        className="profile-grid-item"
+                        onClick={() => navigate(`/food-partner/${id}/reels/${v._id}`)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') navigate(`/food-partner/${id}/reels/${v._id}`)
+                        }}
+                    >
                         <video
                             className="profile-grid-video"
                             style={{ objectFit: 'cover', width: '100%', height: '100%' }}
