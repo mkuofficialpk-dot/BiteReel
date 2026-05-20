@@ -25,6 +25,11 @@ const foodSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  price: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
 });
 
 const foodModel = mongoose.model("food", foodSchema);
