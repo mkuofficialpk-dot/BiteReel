@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/reels.css";
+import HamburgerButton from "./HamburgerButton";
+import SideDrawer from "./SideDrawer";
 
 const MuteIcon = () => (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="white">
@@ -294,9 +296,21 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
   );
 });
 
-const ReelFeed = ({ items, emptyMessage }) => {
+const ReelFeed = ({ foods = [], initialFoodId, headerSlot }) => {
   const [, setCurrentIndex] = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const reelRefs = useRef([]);
+  const scrolledRef = useRef(false);
+
+  // Scroll to the tapped video once on first load
+  useEffect(() => {
+    if (!initialFoodId || scrolledRef.current || foods.length === 0) return;
+    const idx = foods.findIndex((f) => String(f._id) === String(initialFoodId));
+    if (idx !== -1 && reelRefs.current[idx]) {
+      reelRefs.current[idx].scrollIntoView({ behavior: "auto", block: "start" });
+      scrolledRef.current = true;
+    }
+  }, [foods, initialFoodId]);
 
   const scrollToIndex = useCallback((index) => {
     reelRefs.current[index]?.scrollIntoView({ behavior: "smooth" });
@@ -307,7 +321,7 @@ const ReelFeed = ({ items, emptyMessage }) => {
       if (e.key === "ArrowDown") {
         e.preventDefault();
         setCurrentIndex((prev) => {
-          const next = Math.min(prev + 1, items.length - 1);
+          const next = Math.min(prev + 1, foods.length - 1);
           scrollToIndex(next);
           return next;
         });
@@ -323,15 +337,28 @@ const ReelFeed = ({ items, emptyMessage }) => {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [items.length, scrollToIndex]);
+  }, [foods.length, scrollToIndex]);
 
   return (
     <div className="home-page">
+      {headerSlot ? (
+        headerSlot
+      ) : (
+        <>
+          <HamburgerButton onClick={() => setDrawerOpen(true)} />
+          <SideDrawer
+            open={drawerOpen}
+            onClose={() => setDrawerOpen(false)}
+            role="user"
+            profile={null}
+          />
+        </>
+      )}
       <div className="feed" role="feed" aria-label="Food reels">
-        {items.length === 0 ? (
-          <div className="feed-empty">{emptyMessage}</div>
+        {foods.length === 0 ? (
+          <div className="feed-empty">No videos available.</div>
         ) : (
-          items.map((reel, index) => (
+          foods.map((reel, index) => (
             <ReelItem
               key={reel._id}
               reel={reel}

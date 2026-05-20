@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import '../../styles/reels.css'
 import ReelFeed from '../../components/ReelFeed'
 import BottomNav from '../../components/BottomNav'
-import HamburgerButton from '../../components/HamburgerButton'
-import SideDrawer from '../../components/SideDrawer'
 
 const Home = () => {
     const [videos, setVideos] = useState([])
-    const [drawerOpen, setDrawerOpen] = useState(false)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -22,15 +18,8 @@ const Home = () => {
 
     return (
         <>
-            <ReelFeed items={videos} emptyMessage="No videos available." />
-            <HamburgerButton onClick={() => setDrawerOpen(true)} />
+            <ReelFeed foods={videos} />
             <BottomNav />
-            <SideDrawer
-                open={drawerOpen}
-                onClose={() => setDrawerOpen(false)}
-                role="user"
-                profile={null}
-            />
         </>
     )
 }
