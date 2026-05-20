@@ -1,0 +1,251 @@
+/* side-drawer.css — hamburger button + slide-in drawer */
+
+/* ════════════════════════════════════════════════════════════
+   Hamburger trigger button  (fixed top-left, above video)
+════════════════════════════════════════════════════════════ */
+.hamburger-btn {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 90;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(242, 237, 232, 0.1);
+  background: rgba(8, 8, 8, 0.62);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: rgba(242, 237, 232, 0.88);
+  padding: 0;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.hamburger-btn:hover {
+  background: rgba(242, 237, 232, 0.1);
+  transform: scale(1.06);
+}
+
+.hamburger-btn:active {
+  transform: scale(0.93);
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Drawer backdrop
+════════════════════════════════════════════════════════════ */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Drawer panel
+════════════════════════════════════════════════════════════ */
+.drawer-panel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 78%;
+  max-width: 360px;
+  background: #131110;
+  border-right: 1px solid rgba(242, 237, 232, 0.07);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  scrollbar-width: none;
+}
+
+.drawer-panel::-webkit-scrollbar {
+  display: none;
+}
+
+.drawer-backdrop.open .drawer-panel {
+  transform: translateX(0);
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Profile section (top card)
+════════════════════════════════════════════════════════════ */
+.drawer-profile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 36px 20px 22px;
+}
+
+.drawer-avatar {
+  width: 64px;
+  height: 64px;
+  min-width: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #c97940;
+  box-shadow: 0 0 0 4px rgba(201, 121, 64, 0.12);
+  display: block;
+  background: #1c1814;
+}
+
+.drawer-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+}
+
+.drawer-name {
+  font-size: 17px;
+  font-weight: 700;
+  color: #f2ede8;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.drawer-sub {
+  font-size: 12px;
+  color: rgba(242, 237, 232, 0.42);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Divider
+════════════════════════════════════════════════════════════ */
+.drawer-divider {
+  height: 1px;
+  background: rgba(242, 237, 232, 0.06);
+  margin: 6px 0;
+  flex-shrink: 0;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Menu nav
+════════════════════════════════════════════════════════════ */
+.drawer-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 6px 0;
+}
+
+.drawer-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 20px;
+  height: 54px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #f2ede8;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
+  transition: background 0.15s ease;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.drawer-item:hover {
+  background: rgba(242, 237, 232, 0.04);
+}
+
+.drawer-item:active {
+  background: rgba(242, 237, 232, 0.08);
+}
+
+.drawer-item-icon {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(242, 237, 232, 0.55);
+}
+
+.drawer-item-label {
+  flex: 1;
+}
+
+.drawer-item-chevron {
+  color: rgba(242, 237, 232, 0.24);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+/* Logout — visually distinct */
+.drawer-item--logout {
+  color: #e07070;
+}
+
+.drawer-item--logout .drawer-item-icon {
+  color: rgba(224, 112, 112, 0.7);
+}
+
+/* Disabled item (View Orders) */
+.drawer-item--disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* Item with subtitle (View Orders) */
+.drawer-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.drawer-item-sub {
+  font-size: 11px;
+  color: rgba(242, 237, 232, 0.38);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+
+/* ════════════════════════════════════════════════════════════
+   Footer
+════════════════════════════════════════════════════════════ */
+.drawer-footer {
+  padding: 16px 20px 24px;
+  font-size: 11px;
+  color: rgba(242, 237, 232, 0.18);
+  letter-spacing: 0.06em;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  flex-shrink: 0;
+}
