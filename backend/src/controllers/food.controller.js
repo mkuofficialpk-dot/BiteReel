@@ -3,6 +3,7 @@ const foodModel = require("../models/food.model");
 const storageService = require("../services/storage.services");
 const likeModel = require("../models/likes.model");
 const saveModel = require("../models/save.model");
+const cartModel = require("../models/cart.model");
 const { v4: uuid } = require("uuid");
 
 async function createFood(req, res) {
@@ -11,11 +12,14 @@ async function createFood(req, res) {
     uuid()
   );
 
+  const price = parseFloat(req.body.price);
+
   const foodItem = await foodModel.create({
     name: req.body.name,
     description: req.body.description,
     video: fileUploadResult.url,
     foodPartner: req.foodPartner._id,
+    price: isNaN(price) || price < 0 ? 0 : price,
   });
 
   res.status(201).json({
@@ -25,20 +29,23 @@ async function createFood(req, res) {
 }
 
 async function getFoodItems(req, res) {
-  const foodItems = await foodModel.find({});
+  const foodItems = await foodModel.find({}).populate("foodPartner", "name");
 
-  const [likes, saves] = await Promise.all([
+  const [likes, saves, cart] = await Promise.all([
     likeModel.find({ user: req.user._id }).select("food"),
     saveModel.find({ user: req.user._id }).select("food"),
+    cartModel.findOne({ user: req.user._id }).select("items"),
   ]);
 
   const likedSet = new Set(likes.map((l) => l.food.toString()));
   const savedSet = new Set(saves.map((s) => s.food.toString()));
+  const cartSet = new Set(cart ? cart.items.map((i) => i.food.toString()) : []);
 
   const enriched = foodItems.map((item) => ({
     ...item.toObject(),
     isLiked: likedSet.has(item._id.toString()),
     isSaved: savedSet.has(item._id.toString()),
+    isInCart: cartSet.has(item._id.toString()),
   }));
 
   res.status(200).json({
