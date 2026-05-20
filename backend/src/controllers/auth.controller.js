@@ -84,6 +84,16 @@ function logoutUser(req, res) {
   });
 }
 
+function getMe(req, res) {
+  res.status(200).json({
+    user: {
+      _id: req.user._id,
+      fullName: req.user.fullName,
+      email: req.user.email,
+    },
+  });
+}
+
 // -----------------CONTROLLERS FOR FOOD PARTNER----------------------
 async function registerFoodPartner(req, res) {
   const { name, email, password, phone, address, contactName } = req.body;
@@ -174,6 +184,7 @@ module.exports = {
   registerUser,
   loginUser,
   logoutUser,
+  getMe,
   registerFoodPartner,
   loginFoodPartner,
   logoutFoodPartner,

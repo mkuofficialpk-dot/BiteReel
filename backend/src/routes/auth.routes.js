@@ -4,6 +4,7 @@
 
 const express = require('express'); // 1st part
 const authController = require("../controllers/auth.controller") //3rd part (from 12th part of auth.controller.js file)
+const { authUserMiddleware } = require("../middlewares/auth.middleware");
 
 const router = express.Router();  // 1st part
 
@@ -21,6 +22,8 @@ router.post("/user/login", authController.loginUser) //4th part
 
 //API endpoint for Logout
 router.get("/user/logout", authController.logoutUser); //5th part
+
+router.get("/user/me", authUserMiddleware, authController.getMe);
 
 // -----------------FoodPartner Auth API's----------------------
 
