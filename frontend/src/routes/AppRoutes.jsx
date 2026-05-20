@@ -9,6 +9,7 @@ import Cart from "../pages/general/Cart";
 import CreateFood from "../pages/food-partner/CreateFood";
 import Profile from "../pages/food-partner/profile";
 import Dashboard from "../pages/food-partner/Dashboard";
+import PartnerReels from "../pages/food-partner/PartnerReels";
 const AppRoutes = () => {
   return (
     <Router>
@@ -22,6 +23,7 @@ const AppRoutes = () => {
         <Route path="/food-partner/login" element={<FoodPartnerLogin />} />
         <Route path="/food-partner/dashboard" element={<Dashboard />} />
         <Route path="/food-partner/:id" element={<Profile />} />
+        <Route path="/food-partner/:partnerId/reels/:foodId" element={<PartnerReels />} />
         <Route path="/" element={<Home />} />
         <Route path="/saved" element={<Saved />} />
         <Route path="/cart" element={<Cart />} />
