@@ -95,6 +95,7 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
   const [likeCount, setLikeCount] = useState(reel.likeCount || 0);
   const [saved, setSaved] = useState(reel.isSaved || false);
   const [saveCount, setSaveCount] = useState(reel.saveCount || 0);
+  const [inCart, setInCart] = useState(reel.isInCart || false);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const navigate = useNavigate();
@@ -177,6 +178,23 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
     alert("Comments coming soon");
   };
 
+  const handleAddToCart = async () => {
+    if (inCart) {
+      navigate("/cart");
+      return;
+    }
+    setInCart(true);
+    try {
+      await axios.post(
+        "http://localhost:3000/api/cart/add",
+        { foodId: reel._id },
+        { withCredentials: true }
+      );
+    } catch {
+      setInCart(false);
+    }
+  };
+
   return (
     <article
       className={`reel-item${visible ? " reel-visible" : ""}`}
@@ -248,11 +266,29 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible }, ref) {
 
       <div className="reel-overlay">
         {partnerName && <span className="reel-partner">{partnerName}</span>}
-        <h2 className="reel-name">{reel.name}</h2>
+        <div className="reel-title-row">
+          <h2 className="reel-title">{reel.name}</h2>
+          {reel.price > 0 && (
+            <span className="reel-price">PKR {reel.price}</span>
+          )}
+        </div>
         <p className="reel-description">{reel.description}</p>
-        <button className="visit-btn" onClick={handleVisitStore} type="button">
-          Visit Store
-        </button>
+        <div className="reel-actions-row">
+          <button
+            className="reel-btn-secondary"
+            onClick={handleVisitStore}
+            type="button"
+          >
+            Visit Store
+          </button>
+          <button
+            className={`reel-btn-primary${inCart ? " reel-btn-incart" : ""}`}
+            onClick={handleAddToCart}
+            type="button"
+          >
+            {inCart ? "In Cart" : "Add to Cart"}
+          </button>
+        </div>
       </div>
     </article>
   );
