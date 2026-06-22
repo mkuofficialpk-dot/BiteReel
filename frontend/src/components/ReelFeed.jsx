@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback, forwardRef } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api";
 import "../styles/reels.css";
 import HamburgerButton from "./HamburgerButton";
 import SideDrawer from "./SideDrawer";
@@ -155,11 +155,7 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible, onComment, comm
     setLiked(!wasLiked);
     setLikeCount((c) => (wasLiked ? c - 1 : c + 1));
     try {
-      await axios.post(
-        "http://localhost:3000/api/food/like",
-        { foodId: reel._id },
-        { withCredentials: true }
-      );
+      await api.post("/api/food/like", { foodId: reel._id });
     } catch {
       setLiked(wasLiked);
       setLikeCount((c) => (wasLiked ? c + 1 : c - 1));
@@ -171,11 +167,7 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible, onComment, comm
     setSaved(!wasSaved);
     setSaveCount((c) => (wasSaved ? c - 1 : c + 1));
     try {
-      await axios.post(
-        "http://localhost:3000/api/food/save",
-        { foodId: reel._id },
-        { withCredentials: true }
-      );
+      await api.post("/api/food/save", { foodId: reel._id });
     } catch {
       setSaved(wasSaved);
       setSaveCount((c) => (wasSaved ? c + 1 : c - 1));
@@ -194,11 +186,7 @@ const ReelItem = forwardRef(function ReelItem({ reel, onVisible, onComment, comm
     }
     setInCart(true);
     try {
-      await axios.post(
-        "http://localhost:3000/api/cart/add",
-        { foodId: reel._id },
-        { withCredentials: true }
-      );
+      await api.post("/api/cart/add", { foodId: reel._id });
     } catch {
       setInCart(false);
     }

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../../styles/dashboard.css'
-import axios from 'axios'
+import api from '../../api'
 import defaultAvatar from '../../assets/default-avatar.svg'
 import HamburgerButton from '../../components/HamburgerButton'
 import SideDrawer from '../../components/SideDrawer'
@@ -47,9 +47,7 @@ const UploadSheet = ({ open, onClose, onSuccess }) => {
         formData.append('price', price)
 
         try {
-            await axios.post('http://localhost:3000/api/food/', formData, {
-                withCredentials: true,
-            })
+            await api.post('/api/food/', formData)
             reset()
             onSuccess()
             onClose()
@@ -203,9 +201,7 @@ const EditSheet = ({ open, onClose, profile, onSuccess }) => {
         if (image) formData.append('image', image)
 
         try {
-            await axios.patch('http://localhost:3000/api/food-partner/me', formData, {
-                withCredentials: true,
-            })
+            await api.patch('/api/food-partner/me', formData)
             setImage(null)
             setImagePreview(null)
             onSuccess()
@@ -326,7 +322,7 @@ const Dashboard = () => {
     const [drawerOpen, setDrawerOpen] = useState(false)
 
     const fetchData = () => {
-        axios.get('http://localhost:3000/api/food-partner/me', { withCredentials: true })
+        api.get('/api/food-partner/me')
             .then(response => {
                 setProfile(response.data.foodPartner)
                 setVideos(response.data.foodPartner.foodItems)

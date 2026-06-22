@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import '../../styles/profile.css'
 import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../../api'
 import defaultAvatar from '../../assets/default-avatar.svg'
 const Profile = () => {
     const { id } = useParams()
@@ -10,7 +10,7 @@ const Profile = () => {
     const [ profile, setProfile ] = useState(null)
     const [ videos, setVideos ] = useState([])
     useEffect(() => {
-        axios.get(`http://localhost:3000/api/food-partner/${id}`, { withCredentials: true })
+        api.get(`/api/food-partner/${id}`)
             .then(response => {
                 setProfile(response.data.foodPartner)
                 setVideos(response.data.foodPartner.foodItems)

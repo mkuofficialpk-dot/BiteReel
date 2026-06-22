@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../../api'
 import ReelFeed from '../../components/ReelFeed'
 import defaultAvatar from '../../assets/default-avatar.svg'
 import '../../styles/partner-reels.css'
@@ -13,10 +13,8 @@ const PartnerReels = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/api/food-partner/${partnerId}`, {
-        withCredentials: true,
-      })
+    api
+      .get(`/api/food-partner/${partnerId}`)
       .then((res) => {
         setPartner(res.data.foodPartner)
         setFoods(res.data.foodPartner.foodItems || [])

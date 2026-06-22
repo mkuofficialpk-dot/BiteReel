@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import api from '../api'
 import '../styles/side-drawer.css'
 import defaultAvatar from '../assets/default-avatar.svg'
 
@@ -56,10 +56,10 @@ const SideDrawer = ({ open, onClose, role, profile }) => {
 
   const handleLogout = async () => {
     const url = role === 'user'
-      ? 'http://localhost:3000/api/auth/user/logout'
-      : 'http://localhost:3000/api/auth/food-partner/logout'
+      ? '/api/auth/user/logout'
+      : '/api/auth/food-partner/logout'
     try {
-      await axios.get(url, { withCredentials: true })
+      await api.get(url)
     } catch (err) {
       console.error('Logout error:', err)
     }

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import axios from "axios";
+import api from "../api";
 import "../styles/comment-sheet.css";
 
 const LONG_PRESS_MS = 500;
@@ -40,8 +40,8 @@ const CommentSheet = ({ open, foodId, onClose, onCountChange }) => {
 
   useEffect(() => {
     if (meId) return;
-    axios
-      .get("http://localhost:3000/api/auth/user/me", { withCredentials: true })
+    api
+      .get("/api/auth/user/me")
       .then((r) => setMeId(r.data.user._id))
       .catch(() => {});
   }, [meId]);
@@ -51,10 +51,8 @@ const CommentSheet = ({ open, foodId, onClose, onCountChange }) => {
     hasFetched.current = false;
     setComments([]);
     setSelectedId(null);
-    axios
-      .get(`http://localhost:3000/api/comment/${foodId}`, {
-        withCredentials: true,
-      })
+    api
+      .get(`/api/comment/${foodId}`)
       .then((r) => {
         setComments(r.data.comments);
         hasFetched.current = true;
@@ -103,11 +101,7 @@ const CommentSheet = ({ open, foodId, onClose, onCountChange }) => {
     setComments((prev) => [optimistic, ...prev]);
     onCountChange?.(1);
     try {
-      const r = await axios.post(
-        `http://localhost:3000/api/comment/${foodId}`,
-        { text: trimmed },
-        { withCredentials: true }
-      );
+      const r = await api.post(`/api/comment/${foodId}`, { text: trimmed });
       setComments((prev) =>
         prev.map((c) => (c._id === tempId ? r.data.comment : c))
       );
@@ -123,10 +117,7 @@ const CommentSheet = ({ open, foodId, onClose, onCountChange }) => {
   const handleDelete = async (commentId) => {
     setSelectedId(null);
     try {
-      await axios.delete(
-        `http://localhost:3000/api/comment/${commentId}`,
-        { withCredentials: true }
-      );
+      await api.delete(`/api/comment/${commentId}`);
       setComments((prev) => prev.filter((c) => c._id !== commentId));
       onCountChange?.(-1);
     } catch {

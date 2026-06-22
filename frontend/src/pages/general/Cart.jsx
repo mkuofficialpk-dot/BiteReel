@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/cart.css";
 
@@ -45,8 +45,8 @@ const Cart = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/cart", { withCredentials: true })
+    api
+      .get("/api/cart")
       .then((res) => setItems(res.data.items))
       .catch((err) => {
         if (err.response?.status === 401) navigate("/user/login");
@@ -58,11 +58,7 @@ const Cart = () => {
     const prev = items;
     setItems(items.filter((item) => item.food._id !== foodId));
     try {
-      await axios.post(
-        "http://localhost:3000/api/cart/remove",
-        { foodId },
-        { withCredentials: true }
-      );
+      await api.post("/api/cart/remove", { foodId });
     } catch {
       setItems(prev);
     }

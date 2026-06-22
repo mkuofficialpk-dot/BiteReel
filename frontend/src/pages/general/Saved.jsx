@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../../api";
 import BottomNav from "../../components/BottomNav";
 import "../../styles/saved.css";
 
@@ -10,8 +10,8 @@ const Saved = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/api/food/saved", { withCredentials: true })
+    api
+      .get("/api/food/saved")
       .then((res) => setSavedFoods(res.data.savedFoods))
       .catch((err) => {
         if (err.response?.status === 401) navigate("/user/login");
