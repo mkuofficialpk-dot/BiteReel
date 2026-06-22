@@ -5,6 +5,9 @@
 
 const mongoose = require("mongoose");
 
+const dns = require('dns')
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+
 //connecting to the database
 //here we write the code that how over server will connect to the database.
 function connectDB() {
