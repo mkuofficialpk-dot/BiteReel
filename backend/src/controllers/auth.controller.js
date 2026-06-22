@@ -24,11 +24,13 @@ async function registerUser(req, res) {
     password: hashedPassword,
   });
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
   res.cookie("userToken", token, {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   });
 
   res.status(201).json({
@@ -60,11 +62,13 @@ async function loginUser(req, res) {
     });
   }
 
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
   res.cookie("userToken", token, {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   });
 
   res.status(200).json({
@@ -117,11 +121,13 @@ async function registerFoodPartner(req, res) {
     contactName,
   });
 
-  const token = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
   res.cookie("partnerToken", token, {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   });
 
   res.status(201).json({
@@ -156,11 +162,13 @@ async function loginFoodPartner(req, res) {
     });
   }
 
-  const token = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: foodPartner._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
   res.cookie("partnerToken", token, {
     httpOnly: true,
     maxAge: 7 * 24 * 60 * 60 * 1000,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
   });
 
   res.status(200).json({

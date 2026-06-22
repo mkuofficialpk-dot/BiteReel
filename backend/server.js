@@ -13,8 +13,8 @@ connectDB();
 //now as soon as you call it and now run the server i.e npx nodemon server.js it will connect to the database and you will see the message "MongoDB connected" in the console, if there is any error it will show you the error message in the console.
 
 //starting a server
-app.listen(3000, () => {
-    console.log('Server is running on port 3000');
+app.listen(process.env.PORT || 3000, () => {
+    console.log(`Server is running on port ${process.env.PORT || 3000}`);
 })
 //till now we have created a server and started it on port 3000 but we have not created any route yet so if we try to access localhost:3000 it will give us error.
 //we will start over server using commond npx nodemon server.js

@@ -11,14 +11,17 @@ const cors = require("cors"); //10th part (after 9th part in auth.controller.js 
 //creating server instance
 const app = express(); //2nd part
 
+app.set('trust proxy', 1);
+
 app.use(cookieParser()); //7th part (middleware)
 app.use(express.json()); // 5th part (after 2nd part in auth.controller.js file) --> it is middleware
-//creating dummy route here
 
 app.use(cors({
-  origin: "http://localhost:5173", // yahan par hama apne frontend ka url dena ha, taki hamara backend us url sa aane wali request ko accept kar sake
-  credentials: true, // yahan par hama credentials ko true karna ha taki hamara backend cookies ko accept kar sake
-}))
+  origin: process.env.FRONTEND_URL || 'http://localhost:5173',
+  credentials: true,
+}));
+
+app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
 
 app.get("/", (req, res) => {
   // 4th part
@@ -37,6 +40,13 @@ app.use("/api/food-partner", foodPartnerRoutes);
 app.use("/api/cart", require("./routes/cart.routes"));
 
 app.use("/api/comment", require("./routes/comment.routes"));
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.status || 500).json({
+    message: process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message,
+  });
+});
 
 //as we know here we only create server, we start server in the server.js file ==> so we have to
 //export this file to server.js
